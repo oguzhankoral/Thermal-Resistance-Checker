@@ -2,6 +2,13 @@ using Speckle.Automate.Sdk.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
+
+public enum ClimateZones
+{
+  ONEA,
+  TWOA
+}
+
 /// <summary>
 /// This class describes the user specified variables that the function wants to work with.
 /// </summary>
@@ -9,11 +16,16 @@ using System.ComponentModel.DataAnnotations;
 /// are valid and match the required schema.
 public struct FunctionInputs
 {
+  [Required]
+  [EnumDataType(typeof(ClimateZones))]
+  [DefaultValue(ClimateZones.ONEA)]
+  public string ClimateZone;
+
   /// <summary>
   /// The object type to count instances of in the given model version.
   /// </summary>
   [Required]
-  public string SpeckleTypeToCount;
+  public string SpeckleTypeToCheck;
 
   /// <summary>
   /// The total number of the specified type expected.
@@ -22,11 +34,4 @@ public struct FunctionInputs
   [Range(1, 100)]
   [Required]
   public int SpeckleTypeTargetCount;
-
-  /// <summary>
-  /// An arbitrary example of using a secret input value.
-  /// </summary>
-  [Required]
-  [Secret]
-  public string ExternalServiceKey;
 }

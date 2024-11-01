@@ -13,14 +13,16 @@ public static class AutomateFunction
   {
     Console.WriteLine("Starting execution");
     _ = typeof(ObjectsKit).Assembly; // INFO: Force objects kit to initialize
-    var threshold = 0.15;
+    var threshold = 0.02;
     Console.WriteLine("Receiving version");
     var commitObject = await automationContext.ReceiveVersion();
 
-    var values = commitObject
+    var objects = commitObject
       .Flatten()
-      .Where(b => b.speckle_type == "Objects.BuiltElements.Revit.RevitElement" && (string)b["category"]! == "Windows")
-      .Select(GetThermalResistance);
+      .Where(b => b.speckle_type == "Objects.BuiltElements.Wall:Objects.BuiltElements.Revit.RevitWall" &&
+                  (string)b["category"]! == "Walls");
+
+    var values = objects.Select(GetThermalResistance);
 
     var failedObjectIds = values.Where(val => val.value > threshold).Select(v => v.id).ToList();
 
@@ -38,6 +40,10 @@ public static class AutomateFunction
   private static (string id, double value) GetThermalResistance(Base obj)
   {
     var properties = obj["properties"] as Dictionary<string, object>;
+    if (properties is null)
+    {
+      return (obj.id, 0);
+    }
     var typeParameters = properties!["Type Parameters"] as Dictionary<string, object>;
     var analyticalProperties = typeParameters!["Analytical Properties"] as Dictionary<string, object>;
     var thermalResistance = analyticalProperties!["Thermal Resistance (R)"] as Dictionary<string, object>;

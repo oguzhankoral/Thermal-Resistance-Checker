@@ -28,7 +28,7 @@ public sealed class AutomationContextTest : IDisposable
   {
     var inputs = new FunctionInputs
     {
-      SpeckleTypeToCount = "Base",
+      SpeckleTypeToCheck = "Base",
       SpeckleTypeTargetCount = 1
     };
 
