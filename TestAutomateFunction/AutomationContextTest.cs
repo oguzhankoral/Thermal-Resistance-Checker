@@ -28,8 +28,7 @@ public sealed class AutomationContextTest : IDisposable
   {
     var inputs = new FunctionInputs
     {
-      SpeckleTypeToCheck = "Base",
-      SpeckleTypeTargetCount = 1
+      SpeckleTypeToCheck = "Base"
     };
 
     var automationRunData = await TestAutomateUtils.CreateTestRun(client);

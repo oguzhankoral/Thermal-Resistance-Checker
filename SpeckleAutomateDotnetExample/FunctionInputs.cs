@@ -5,9 +5,60 @@ using System.ComponentModel.DataAnnotations;
 
 public enum ClimateZones
 {
-  ONEA,
-  TWOA
+  // Tropical Climates
+  Af_TropicalRainforest,
+  Am_TropicalMonsoon,
+  Aw_TropicalSavanna,
+  As_TropicalSavanna,
+
+  // Dry Climates
+  BWh_HotDesert,
+  BWk_ColdDesert,
+  BSh_HotSemiArid,
+  BSk_ColdSemiArid,
+
+  // Temperate Climates
+  Cfa_HumidSubtropical,
+  Cfb_Oceanic,
+  Cfc_SubpolarOceanic,
+  Csa_MediterraneanHotSummer,
+  Csb_MediterraneanWarmSummer,
+  Csc_MediterraneanCoolSummer,
+
+  // Continental Climates
+  Dfa_HumidContinentalHotSummer,
+  Dfb_HumidContinentalMildSummer,
+  Dfc_Subarctic,
+  Dfd_SubarcticExtremeWinter,
+  Dsa_MediterraneanInfluenceSnowyWinter,
+  Dsb_MediterraneanInfluenceSnowyWinter,
+  Dsc_MediterraneanInfluenceSnowyWinter,
+  Dsd_MediterraneanInfluenceSnowyWinter,
+
+  // Polar Climates
+  ET_Tundra,
+  EF_IceCap
 }
+
+public static class UValues
+{
+  public static Dictionary<ClimateZones, double> Wall => new Dictionary<ClimateZones, double>()
+  {
+    { ClimateZones.Csa_MediterraneanHotSummer, 1.51 },
+  };
+  
+  public static Dictionary<ClimateZones, double> Window => new Dictionary<ClimateZones, double>()
+  {
+    { ClimateZones.Csa_MediterraneanHotSummer, 0.55 },
+  };
+  
+  public static Dictionary<ClimateZones, double> Roof => new Dictionary<ClimateZones, double>()
+  {
+    { ClimateZones.Csa_MediterraneanHotSummer, 2.32 },
+  };
+}
+
+
 
 /// <summary>
 /// This class describes the user specified variables that the function wants to work with.
@@ -18,7 +69,7 @@ public struct FunctionInputs
 {
   [Required]
   [EnumDataType(typeof(ClimateZones))]
-  [DefaultValue(ClimateZones.ONEA)]
+  [DefaultValue(ClimateZones.Csa_MediterraneanHotSummer)]
   public string ClimateZone;
 
   /// <summary>
@@ -26,12 +77,4 @@ public struct FunctionInputs
   /// </summary>
   [Required]
   public string SpeckleTypeToCheck;
-
-  /// <summary>
-  /// The total number of the specified type expected.
-  /// </summary>
-  [DefaultValue(10)]
-  [Range(1, 100)]
-  [Required]
-  public int SpeckleTypeTargetCount;
 }
