@@ -28,7 +28,10 @@ public sealed class AutomationContextTest : IDisposable
   {
     var inputs = new FunctionInputs
     {
-      SpeckleTypeToCheck = "Base"
+      ClimateZone = ClimateZones.Csa_MediterraneanHotSummer,
+      CheckWindows = true,
+      CheckWalls = true,
+      CheckRoofs = true
     };
 
     var automationRunData = await TestAutomateUtils.CreateTestRun(client);
