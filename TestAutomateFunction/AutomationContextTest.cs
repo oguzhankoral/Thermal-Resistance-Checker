@@ -28,7 +28,7 @@ public sealed class AutomationContextTest : IDisposable
   {
     var inputs = new FunctionInputs
     {
-      ClimateZone = ClimateZones.Csa_MediterraneanHotSummer,
+      ClimateZone = ClimateZones.Csa_MediterraneanHotSummer.ToString(),
       CheckWindows = true,
       CheckWalls = true,
       CheckRoofs = true

@@ -1,7 +1,5 @@
-using Speckle.Automate.Sdk.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
 
 public enum ClimateZones
 {
@@ -165,20 +163,17 @@ public struct FunctionInputs
   [Required]
   [EnumDataType(typeof(ClimateZones))]
   [DefaultValue(ClimateZones.Csa_MediterraneanHotSummer)]
-  public ClimateZones ClimateZone;
+  public string ClimateZone;
   
   [Required]
   [DefaultValue(true)]
-  [Description("Include Walls")]
   public bool CheckWalls;
   
   [Required]
   [DefaultValue(true)]
-  [Description("Include Windows")]
   public bool CheckWindows;
   
   [Required]
   [DefaultValue(true)]
-  [Description("Include Roofs")]
   public bool CheckRoofs;
 }

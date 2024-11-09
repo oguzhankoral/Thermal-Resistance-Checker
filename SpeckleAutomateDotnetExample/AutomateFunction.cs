@@ -93,19 +93,26 @@ public static class AutomateFunction
     
     var walls = GetByType(flatten, SpeckleType.Wall);
     var uValues = walls.Select(GetThermalResistance);
-    var expectedValue = UValues.Wall[functionInputs.ClimateZone];
-    var failedObjectIds = uValues.Where(val => val.value < expectedValue).Select(v => (v.id, v.value)).ToList();
-
-    foreach (var (id, value) in failedObjectIds)
+    // Attempt to parse ClimateZone as a ClimateZones enum
+    if (Enum.TryParse(functionInputs.ClimateZone, out ClimateZones climateZoneEnum))
     {
-      automationContext.AttachResultToObjects(
-        ObjectResultLevel.Error, 
-        "Walls", 
-        new []{id}, 
-        $"Wall expected to have maximum {expectedValue} U-value but it is {value}."
-      );
+      var expectedValue = UValues.Wall[climateZoneEnum];
+      var failedObjectIds = uValues.Where(val => val.value < expectedValue).Select(v => (v.id, v.value)).ToList();
+
+      foreach (var (id, value) in failedObjectIds)
+      {
+        automationContext.AttachResultToObjects(
+          ObjectResultLevel.Error, 
+          "Walls", 
+          new []{id}, 
+          $"Wall expected to have maximum {expectedValue} U-value but it is {value}."
+        );
+      }
+      return failedObjectIds.Select(i => i.id).ToList();
     }
-    return failedObjectIds.Select(i => i.id).ToList();
+
+    // Handle the case where the ClimateZone string is not a valid ClimateZones value
+    throw new ArgumentException($"Invalid ClimateZone: {functionInputs.ClimateZone}");
   }
   
   private static List<string> CheckWindows(AutomationContext automationContext, FunctionInputs functionInputs, IEnumerable<Base> flatten)
@@ -117,19 +124,25 @@ public static class AutomateFunction
     
     var walls = GetByType(flatten, SpeckleType.Window);
     var uValues = walls.Select(GetThermalResistance);
-    var expectedValue = UValues.Window[functionInputs.ClimateZone];
-    var failedObjectIds = uValues.Where(val => val.value < expectedValue).Select(v => (v.id, v.value)).ToList();
-
-    foreach (var (id, value) in failedObjectIds)
+    if (Enum.TryParse(functionInputs.ClimateZone, out ClimateZones climateZoneEnum))
     {
-      automationContext.AttachResultToObjects(
-        ObjectResultLevel.Error, 
-        "Windows",
-        new []{id}, 
-        $"Window expected to have maximum {expectedValue} U-value but it is {value}."
-      );
+      var expectedValue = UValues.Window[climateZoneEnum];
+      var failedObjectIds = uValues.Where(val => val.value < expectedValue).Select(v => (v.id, v.value)).ToList();
+
+      foreach (var (id, value) in failedObjectIds)
+      {
+        automationContext.AttachResultToObjects(
+          ObjectResultLevel.Error, 
+          "Windows",
+          new []{id}, 
+          $"Window expected to have maximum {expectedValue} U-value but it is {value}."
+        );
+      }
+      return failedObjectIds.Select(i => i.id).ToList();
     }
-    return failedObjectIds.Select(i => i.id).ToList();
+    
+    // Handle the case where the ClimateZone string is not a valid ClimateZones value
+    throw new ArgumentException($"Invalid ClimateZone: {functionInputs.ClimateZone}");
   }
   
   private static List<string> CheckRoofs(AutomationContext automationContext, FunctionInputs functionInputs, IEnumerable<Base> flatten)
@@ -141,19 +154,25 @@ public static class AutomateFunction
     
     var walls = GetByType(flatten, SpeckleType.Roof);
     var uValues = walls.Select(GetThermalResistance);
-    var expectedValue = UValues.Roof[functionInputs.ClimateZone];
-    var failedObjectIds = uValues.Where(val => val.value < expectedValue).Select(v => (v.id, v.value)).ToList();
-
-    foreach (var (id, value) in failedObjectIds)
+    if (Enum.TryParse(functionInputs.ClimateZone, out ClimateZones climateZoneEnum))
     {
-      automationContext.AttachResultToObjects(
-        ObjectResultLevel.Error, 
-        "Roofs", 
-        new []{id}, 
-        $"Roof expected to have maximum {expectedValue} U-value but it is {value}."
-      );
+      var expectedValue = UValues.Roof[climateZoneEnum];
+      var failedObjectIds = uValues.Where(val => val.value < expectedValue).Select(v => (v.id, v.value)).ToList();
+
+      foreach (var (id, value) in failedObjectIds)
+      {
+        automationContext.AttachResultToObjects(
+          ObjectResultLevel.Error, 
+          "Roofs", 
+          new []{id}, 
+          $"Roof expected to have maximum {expectedValue} U-value but it is {value}."
+        );
+      }
+      return failedObjectIds.Select(i => i.id).ToList();
     }
-    return failedObjectIds.Select(i => i.id).ToList();
+    
+    // Handle the case where the ClimateZone string is not a valid ClimateZones value
+    throw new ArgumentException($"Invalid ClimateZone: {functionInputs.ClimateZone}");
   }
 
   private static IEnumerable<Base> GetByType(IEnumerable<Base> objects, SpeckleType speckleType)
