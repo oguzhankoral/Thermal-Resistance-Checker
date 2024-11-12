@@ -1,14 +1,13 @@
-namespace TestAutomateFunction;
-
 using Speckle.Automate.Sdk;
 using Speckle.Automate.Sdk.Test;
 using Speckle.Core.Api;
 using Speckle.Core.Credentials;
 
+namespace TestAutomateFunction;
+
 [TestFixture]
 public sealed class AutomationContextTest : IDisposable
 {
-
   private Client client;
   private Account account;
 
@@ -18,7 +17,10 @@ public sealed class AutomationContextTest : IDisposable
     account = new Account
     {
       token = TestAutomateEnvironment.GetSpeckleToken(),
-      serverInfo = new ServerInfo { url = TestAutomateEnvironment.GetSpeckleServerUrl().ToString() }
+      serverInfo = new ServerInfo
+      {
+        url = TestAutomateEnvironment.GetSpeckleServerUrl().ToString(),
+      },
     };
     client = new Client(account);
   }
@@ -28,10 +30,10 @@ public sealed class AutomationContextTest : IDisposable
   {
     var inputs = new FunctionInputs
     {
-      ClimateZone = ClimateZones.Csa_MediterraneanHotSummer.ToString(),
+      ClimateZone = ClimateZone.Csa_MediterraneanHotSummer.ToString(),
       CheckWindows = true,
       CheckWalls = true,
-      CheckRoofs = true
+      CheckRoofs = true,
     };
 
     var automationRunData = await TestAutomateUtils.CreateTestRun(client);
