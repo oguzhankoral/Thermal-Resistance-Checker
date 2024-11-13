@@ -75,12 +75,12 @@ public static class AutomateFunction
       if (failedObject.UValue == 0)
       {
         message =
-          $"{speckleTypeString[..^1]} has no any material that have thermal properties.";
+          $"{speckleTypeString} has no any material that have thermal properties.";
       }
       else
       {
         message =
-          $"{speckleTypeString[..^1]} expected to have maximum {failedObject.ExpectedUValue} U-value but it is {failedObject.UValue}.";
+          $"{speckleTypeString} expected to have maximum {failedObject.ExpectedUValue} U-value but it is {failedObject.UValue}.";
       }
 
       automationContext.AttachResultToObjects(
