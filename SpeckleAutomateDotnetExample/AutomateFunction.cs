@@ -37,6 +37,9 @@ public static class AutomateFunction
     // 5- Attach report to failed objects to be able to highlight them in viewer or Revit connector
 
     // 6- Report the automation result as SUCCESS/FAIL
+    automationContext.MarkRunSuccess(
+      "We are going to fail successfully in a bit, don't worry!"
+    );
   }
 
   private static void AttachReportToFailedObjects(
