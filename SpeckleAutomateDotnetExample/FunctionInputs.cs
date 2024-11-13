@@ -10,20 +10,11 @@ namespace TestAutomateFunction;
 /// are valid and match the required schema.
 public struct FunctionInputs
 {
-  [Required]
-  [EnumDataType(typeof(ClimateZone))]
-  [DefaultValue(TestAutomateFunction.ClimateZone.Csa_MediterraneanHotSummer)]
-  public string ClimateZone;
-  
-  [Required]
-  [DefaultValue(true)]
-  public bool CheckWalls;
-  
-  [Required]
-  [DefaultValue(true)]
-  public bool CheckWindows;
-  
-  [Required]
-  [DefaultValue(true)]
-  public bool CheckRoofs;
+  // 0- Create dropdown for available climate zones as "ClimateZones"
+
+  // 1- Create toggle for whether including walls or not
+
+  // 2- Create toggle for whether including windows or not
+
+  // 3- Create toggle for whether including roofs or not
 }

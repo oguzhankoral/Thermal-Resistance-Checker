@@ -21,46 +21,22 @@ public static class AutomateFunction
     FunctionInputs functionInputs
   )
   {
-    var climateZone = GetClimateZone(functionInputs.ClimateZone);
-
     Console.WriteLine("Starting execution");
     _ = typeof(ObjectsKit).Assembly; // INFO: Force objects kit to initialize
 
-    Console.WriteLine("Receiving version");
-    var rootObject = await automationContext.ReceiveVersion();
+    // 0- Get climate zone from function inputs
 
-    Console.WriteLine("Flatten the root object");
-    var flatten = rootObject.Flatten().ToList();
+    // 1- Receive version from automation context
 
-    Console.WriteLine("Traverse the objects by type");
-    var walls = GetByType(flatten, SpeckleType.Wall);
-    var windows = GetByType(flatten, SpeckleType.Window);
-    var roofs = GetByType(flatten, SpeckleType.Roof);
+    // 2- Flatten the objects in received root object
 
-    Console.WriteLine("Checking for compliance");
-    var failedObjects = new List<ObjectToCheck>();
-    var failedWalls = CheckCompliance(walls, climateZone, SpeckleType.Wall);
-    var failedWindows = CheckCompliance(windows, climateZone, SpeckleType.Window);
-    var failedRoofs = CheckCompliance(roofs, climateZone, SpeckleType.Roof);
+    // 3- Get the objects we need
 
-    failedObjects.AddRange(failedWalls);
-    failedObjects.AddRange(failedWindows);
-    failedObjects.AddRange(failedRoofs);
+    // 4- Check the compliance for given object types
 
-    Console.WriteLine("Reporting compliance for failed objects");
-    AttachReportToFailedObjects(automationContext, failedObjects);
+    // 5- Attach report to failed objects to be able to highlight them in viewer or Revit connector
 
-    Console.WriteLine("Reporting the status of all automation");
-    ReportStatus(
-      automationContext,
-      functionInputs,
-      walls.Count(),
-      failedWalls.Count(),
-      windows.Count(),
-      failedWindows.Count(),
-      roofs.Count(),
-      failedRoofs.Count()
-    );
+    // 6- Report the automation result as SUCCESS/FAIL
   }
 
   private static void AttachReportToFailedObjects(
@@ -106,7 +82,7 @@ public static class AutomateFunction
     if (numberOfFailedWalls + numberOfFailedWindows + numberOfFailedRoofs > 0)
     {
       var message = "";
-      if (functionInputs.CheckWalls)
+      if (true) // TODO: Check the whether walls included or not from function inputs
       {
         message += "WALLS:\n";
         if (numberOfWalls > 0)
@@ -118,7 +94,7 @@ public static class AutomateFunction
           message += "There are no walls\n\n";
         }
       }
-      if (functionInputs.CheckWindows)
+      if (true) // TODO: Check the whether windows included or not from function inputs
       {
         message += "WINDOWS:\n";
         if (numberOfWindows > 0)
@@ -131,7 +107,7 @@ public static class AutomateFunction
         }
       }
 
-      if (functionInputs.CheckWindows)
+      if (true) // TODO: Check the whether roofs included or not from function inputs
       {
         message += "ROOFS:\n";
         if (numberOfRoofs > 0)
@@ -196,47 +172,4 @@ public static class AutomateFunction
     // Handle the case where the ClimateZone string is not a valid ClimateZones value
     throw new ArgumentException($"Invalid ClimateZone: {climateZoneString}");
   }
-
-  private static IEnumerable<Base> GetByType(
-    IEnumerable<Base> objects,
-    SpeckleType speckleType
-  )
-  {
-    return objects.Where(b =>
-      b.speckle_type == SpeckleTypes[speckleType]
-      && (string)b["category"]! == SpeckleCategories[speckleType]
-    );
-  }
-
-  private static IEnumerable<Base> GetByType<T>(Base root)
-    where T : Base
-  {
-    var traversal = new GraphTraversal();
-    return traversal
-      .Traverse(root)
-      .Where(obj => obj.Current is T)
-      .Select(obj => obj.Current);
-  }
-
-  private static readonly Dictionary<SpeckleType, string> SpeckleTypes =
-    new()
-    {
-      {
-        SpeckleType.Wall,
-        "Objects.BuiltElements.Wall:Objects.BuiltElements.Revit.RevitWall"
-      },
-      { SpeckleType.Window, "Objects.BuiltElements.Revit.RevitElement" },
-      {
-        SpeckleType.Roof,
-        "Objects.BuiltElements.Roof:Objects.BuiltElements.Revit.RevitRoof.RevitRoof:Objects.BuiltElements.Revit.RevitRoof.RevitExtrusionRoof"
-      },
-    };
-
-  private static readonly Dictionary<SpeckleType, string> SpeckleCategories =
-    new()
-    {
-      { SpeckleType.Wall, "Walls" },
-      { SpeckleType.Window, "Windows" },
-      { SpeckleType.Roof, "Roofs" },
-    };
 }

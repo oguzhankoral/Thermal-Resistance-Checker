@@ -30,10 +30,7 @@ public sealed class AutomationContextTest : IDisposable
   {
     var inputs = new FunctionInputs
     {
-      ClimateZone = ClimateZone.Csa_MediterraneanHotSummer.ToString(),
-      CheckWindows = true,
-      CheckWalls = true,
-      CheckRoofs = true,
+      // TODO: Define test inputs
     };
 
     var automationRunData = await TestAutomateUtils.CreateTestRun(client);
