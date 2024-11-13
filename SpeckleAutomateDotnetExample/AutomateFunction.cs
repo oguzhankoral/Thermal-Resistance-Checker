@@ -71,11 +71,23 @@ public static class AutomateFunction
     foreach (var failedObject in failedObjects)
     {
       var speckleTypeString = failedObject.SpeckleType.ToString();
+      string message = "";
+      if (failedObject.UValue == 0)
+      {
+        message =
+          $"{speckleTypeString[..^1]} has no any material that have thermal properties.";
+      }
+      else
+      {
+        message =
+          $"{speckleTypeString[..^1]} expected to have maximum {failedObject.ExpectedUValue} U-value but it is {failedObject.UValue}.";
+      }
+
       automationContext.AttachResultToObjects(
         ObjectResultLevel.Error,
         speckleTypeString,
         new[] { failedObject.Id },
-        $"{speckleTypeString[..^1]} expected to have maximum {failedObject.ExpectedUValue} U-value but it is {failedObject.UValue}."
+        message
       );
     }
   }
@@ -171,7 +183,7 @@ public static class AutomateFunction
       expectedValue,
       speckleType
     ));
-    return objectsToCheck.Where(obj => obj.UValue < expectedValue);
+    return objectsToCheck.Where(obj => obj.UValue > expectedValue || obj.UValue == 0);
   }
 
   private static ClimateZone GetClimateZone(string climateZoneString)
